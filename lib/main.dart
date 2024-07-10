@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'src/question_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,10 +10,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      
-      home: HomeScreen(),
+    return MaterialApp(
+      title: 'Quiz App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomeScreen(),
     );
   }
 }
@@ -28,7 +31,7 @@ class HomeScreen extends StatelessWidget {
           // Imagen de fondo
           Positioned.fill(
             child: Image.asset(
-              'assets/images/home.png',
+              'assets/images/home.png', // Imagen de la pantalla inicial
               fit: BoxFit.cover,
             ),
           ),
@@ -40,12 +43,14 @@ class HomeScreen extends StatelessWidget {
             child: Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Acción del botón
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QuestionPage(0)),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   shape: const CircleBorder(),
                   padding: const EdgeInsets.all(24),
-               
                 ),
                 child: const Padding(
                   padding: EdgeInsets.all(24.0),
