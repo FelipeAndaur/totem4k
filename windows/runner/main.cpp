@@ -25,8 +25,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   project.set_dart_entrypoint_arguments(std::move(command_line_arguments));
 
   FlutterWindow window(project);
-  Win32Window::Point origin(10, 10);
-  Win32Window::Size size(1280, 720);
+  Win32Window::Point origin(0, 0);
+  Win32Window::Size size(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
   if (!window.Create(L"totem4k", origin, size)) {
     return EXIT_FAILURE;
   }
@@ -35,18 +35,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   // Obtener el handle de la ventana
   HWND hwnd = window.GetHandle();
 
-  // Configurar la ventana en modo de pantalla completa
+  // Configurar la ventana en modo de pantalla completa y sin bordes
   LONG style = GetWindowLong(hwnd, GWL_STYLE);
-  style &= ~WS_OVERLAPPEDWINDOW;
+  style &= ~(WS_CAPTION | WS_THICKFRAME);
   SetWindowLong(hwnd, GWL_STYLE, style);
 
-  MONITORINFO mi = { sizeof(mi) };
-  if (GetMonitorInfo(MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY), &mi)) {
-    SetWindowPos(hwnd, HWND_TOP,
-                 mi.rcMonitor.left, mi.rcMonitor.top,
-                 mi.rcMonitor.right - mi.rcMonitor.left,
-                 mi.rcMonitor.bottom - mi.rcMonitor.top,
-                 SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+  LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+  exStyle &= ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
+  SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+
+  SetWindowPos(hwnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN),
+               SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+
+  // Para asegurarse de que la barra de tareas esté oculta
+  HWND taskBar = FindWindow(L"Shell_TrayWnd", NULL);
+  if (taskBar) {
+    ShowWindow(taskBar, SW_HIDE);
   }
 
   ::MSG msg;
