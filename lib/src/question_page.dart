@@ -15,7 +15,7 @@ class _QuestionPageState extends State<QuestionPage> {
   List<Map<String, String>> questions = [
     {
       "image":
-          "assets/images/Q1-Frutas.png" // Primera pregunta con la imagen incluida
+          "assets/images/Q1-FrutasHD.png" // Primera pregunta con la imagen incluida
     },
     // Agrega más preguntas e imágenes aquí
   ];
