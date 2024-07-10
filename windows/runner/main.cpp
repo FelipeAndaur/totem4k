@@ -32,6 +32,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   }
   window.SetQuitOnClose(true);
 
+  // Obtener el handle de la ventana
+  HWND hwnd = window.GetHandle();
+
+  // Configurar la ventana en modo de pantalla completa
+  LONG style = GetWindowLong(hwnd, GWL_STYLE);
+  style &= ~WS_OVERLAPPEDWINDOW;
+  SetWindowLong(hwnd, GWL_STYLE, style);
+
+  MONITORINFO mi = { sizeof(mi) };
+  if (GetMonitorInfo(MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY), &mi)) {
+    SetWindowPos(hwnd, HWND_TOP,
+                 mi.rcMonitor.left, mi.rcMonitor.top,
+                 mi.rcMonitor.right - mi.rcMonitor.left,
+                 mi.rcMonitor.bottom - mi.rcMonitor.top,
+                 SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+  }
+
   ::MSG msg;
   while (::GetMessage(&msg, nullptr, 0, 0)) {
     ::TranslateMessage(&msg);
