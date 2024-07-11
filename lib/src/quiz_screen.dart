@@ -27,13 +27,69 @@ class QuizScreen extends StatelessWidget {
               Positioned.fill(
                 child: Image.asset(
                   images[index],
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+              // Botones
+              Positioned(
+                bottom: 50,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: 120,
+                        height: 60,
+                        child: CustomButton(
+                          text: 'Sí',
+                          onPressed: () {
+                            // Manejar la respuesta "Sí"
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 120,
+                        height: 60,
+                        child: CustomButton(
+                          text: 'No',
+                          onPressed: () {
+                            // Manejar la respuesta "No"
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           );
         },
       ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+
+  const CustomButton({required this.text, required this.onPressed, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.black, backgroundColor: Colors.grey[300], padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ), // Color del texto del botón
+        textStyle: const TextStyle(fontSize: 100, fontWeight: FontWeight.bold),
+      ),
+      child: Text(text),
     );
   }
 }
