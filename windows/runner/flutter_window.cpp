@@ -29,9 +29,6 @@ bool FlutterWindow::OnCreate() {
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
     this->Show();
-    this->HideWindowControls();
-    // Mantener la ventana siempre en la parte superior
-    SetWindowPos(this->GetHandle(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
   });
 
   // Flutter can complete the first frame before the "show window" callback is
@@ -40,24 +37,6 @@ bool FlutterWindow::OnCreate() {
   flutter_controller_->ForceRedraw();
 
   return true;
-}
-
-void FlutterWindow::HideWindowControls() {
-  // Hide the window title bar and set the window to full screen.
-  LONG style = GetWindowLong(GetHandle(), GWL_STYLE);
-  style &= ~WS_OVERLAPPEDWINDOW;
-  SetWindowLong(GetHandle(), GWL_STYLE, style);
-
-  SetWindowPos(GetHandle(), HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_FRAMECHANGED);
-}
-
-void FlutterWindow::RestoreWindowControls() {
-  // Restore the window title bar and exit full screen mode.
-  LONG style = GetWindowLong(GetHandle(), GWL_STYLE);
-  style |= WS_OVERLAPPEDWINDOW;
-  SetWindowLong(GetHandle(), GWL_STYLE, style);
-
-  SetWindowPos(GetHandle(), HWND_TOP, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
 }
 
 void FlutterWindow::OnDestroy() {

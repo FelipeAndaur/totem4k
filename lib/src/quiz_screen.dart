@@ -1,7 +1,43 @@
 import 'package:flutter/material.dart';
+import 'controllers/quiz_controller.dart';
+import 'result_screens.dart';
 
-class QuizScreen extends StatelessWidget {
+class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
+
+  @override
+  _QuizScreenState createState() => _QuizScreenState();
+}
+
+class _QuizScreenState extends State<QuizScreen> {
+  late QuizController _controller;
+  final PageController _pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = QuizController(9); // Número de preguntas
+  }
+
+  void _onAnswerSelected(int index, int answer) {
+    setState(() {
+      _controller.setAnswer(index, answer);
+    });
+
+    if (index < _controller.numberOfQuestions - 1) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeIn,
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResultScreen(controller: _controller),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +55,7 @@ class QuizScreen extends StatelessWidget {
 
     return Scaffold(
       body: PageView.builder(
+        controller: _pageController,
         itemCount: images.length,
         itemBuilder: (context, index) {
           return Stack(
@@ -27,12 +64,92 @@ class QuizScreen extends StatelessWidget {
               Positioned.fill(
                 child: Image.asset(
                   images[index],
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+              // Botones
+              Positioned(
+                bottom: 50,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        height: 150,
+                        child: CustomButton(
+                          text: 'Sí',
+                          isSelected: _controller.getAnswer(index) == 0,
+                          selectedTextColor: Colors.green,
+                          onPressed: () {
+                            _onAnswerSelected(index, 0);
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 250,
+                        height: 150,
+                        child: CustomButton(
+                          text: 'No',
+                          isSelected: _controller.getAnswer(index) == 1,
+                          selectedTextColor: Colors.red,
+                          onPressed: () {
+                            _onAnswerSelected(index, 1);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final Color selectedTextColor;
+  final VoidCallback onPressed;
+
+  const CustomButton({
+    required this.text,
+    required this.isSelected,
+    required this.selectedTextColor,
+    required this.onPressed,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: isSelected ? selectedTextColor : Colors.black,
+        backgroundColor: Colors.grey[300], 
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontFamily: 'Goldplay',
+            fontSize: 300,
+            fontWeight: FontWeight.w900,
+            color: isSelected ? selectedTextColor : Colors.black,
+          ),
+        ),
       ),
     );
   }
