@@ -15,6 +15,11 @@ class FlutterWindow : public Win32Window {
   explicit FlutterWindow(const flutter::DartProject& project);
   virtual ~FlutterWindow();
 
+  // Set the window to hide the title bar and set full screen mode.
+  void HideWindowControls();
+  // Restore the window title bar and exit full screen mode.
+  void RestoreWindowControls();
+
  protected:
   // Win32Window:
   bool OnCreate() override;

@@ -15,19 +15,39 @@ class _QuestionPageState extends State<QuestionPage> {
   List<Map<String, String>> questions = [
     {
       "image":
-          "assets/images/Q1-Frutas.png" // Primera pregunta con la imagen incluida
+          "assets/images/Q1.png" // Primera pregunta con la imagen incluida
     },
         {
       "image":
-          "assets/images/Q2-Agua.png" // Primera pregunta con la imagen incluida
+          "assets/images/Q2.png" // Primera pregunta con la imagen incluida
     },
         {
       "image":
-          "assets/images/Q3-Porciones.png" // Primera pregunta con la imagen incluida
+          "assets/images/Q3.png" // Primera pregunta con la imagen incluida
     },
         {
       "image":
-          "assets/images/Q4-Completo.png" // Primera pregunta con la imagen incluida
+          "assets/images/Q4.png" // Primera pregunta con la imagen incluida
+    },
+        {
+      "image":
+          "assets/images/Q5.png" // Primera pregunta con la imagen incluida
+    },
+        {
+      "image":
+          "assets/images/Q6.png" // Primera pregunta con la imagen incluida
+    },
+        {
+      "image":
+          "assets/images/Q7.png" // Primera pregunta con la imagen incluida
+    },
+        {
+      "image":
+          "assets/images/Q8.png" // Primera pregunta con la imagen incluida
+    },
+        {
+      "image":
+          "assets/images/Q9.png" // Primera pregunta con la imagen incluida
     }
     // Agrega más preguntas e imágenes aquí
   ];
