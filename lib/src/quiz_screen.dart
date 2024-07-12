@@ -77,7 +77,7 @@ class QuizScreenState extends State<QuizScreen> {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      MaterialPageRoute(builder: (context) =>  const HomeScreen()),
                       (route) => false,
                     );
                   },

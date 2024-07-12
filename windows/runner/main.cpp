@@ -5,6 +5,9 @@
 #include "flutter_window.h"
 #include "utils.h"
 
+// Prototipo de la función para restaurar el modo de ventana normal
+void RestoreWindow();
+
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
   // Attach to console when present (e.g., 'flutter run') or create a
@@ -30,6 +33,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   if (!window.Create(L"totem", origin, size)) {
     return EXIT_FAILURE;
   }
+  
+  // Set the window style to no border and fullscreen
+  HWND hwnd = window.GetHandle();
+  LONG style = GetWindowLong(hwnd, GWL_STYLE);
+  style &= ~(WS_OVERLAPPEDWINDOW);
+  style |= WS_POPUP;
+  SetWindowLong(hwnd, GWL_STYLE, style);
+  
+  // Get the monitor info and set the window to fullscreen
+  MONITORINFO mi = { sizeof(mi) };
+  if (GetMonitorInfo(MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY), &mi)) {
+    SetWindowPos(hwnd, HWND_TOP,
+                 mi.rcMonitor.left, mi.rcMonitor.top,
+                 mi.rcMonitor.right - mi.rcMonitor.left,
+                 mi.rcMonitor.bottom - mi.rcMonitor.top,
+                 SWP_FRAMECHANGED | SWP_NOACTIVATE);
+  }
+  
+  ShowWindow(hwnd, SW_MAXIMIZE);
+
   window.SetQuitOnClose(true);
 
   ::MSG msg;
@@ -38,6 +61,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     ::DispatchMessage(&msg);
   }
 
+  // Restore the window mode before exiting
+  RestoreWindow();
+
   ::CoUninitialize();
   return EXIT_SUCCESS;
+}
+
+void RestoreWindow() {
+  HWND hwnd = GetActiveWindow();
+  if (hwnd) {
+    LONG style = GetWindowLong(hwnd, GWL_STYLE);
+    style &= ~WS_POPUP;
+    style |= WS_OVERLAPPEDWINDOW;
+    SetWindowLong(hwnd, GWL_STYLE, style);
+
+    SetWindowPos(hwnd, NULL,
+                 0, 0, 1280, 720,
+                 SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+  }
 }
