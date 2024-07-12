@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:totem4k/main.dart';
 import 'controllers/quiz_controller.dart';
 import 'result_screens.dart';
 
@@ -67,9 +68,24 @@ class _QuizScreenState extends State<QuizScreen> {
                   fit: BoxFit.fitWidth,
                 ),
               ),
+              // Icono de home
+              Positioned(
+                top: 10,
+                right: 10,
+                child: IconButton(
+                  icon: const Icon(Icons.home, color: Colors.white, size: 30),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      (route) => false,
+                    );
+                  },
+                ),
+              ),
               // Botones
               Positioned(
-                bottom: 50,
+                bottom: 180,
                 left: 0,
                 right: 0,
                 child: Padding(
@@ -78,10 +94,10 @@ class _QuizScreenState extends State<QuizScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       SizedBox(
-                        width: 250,
+                        width: 200,
                         height: 150,
                         child: CustomButton(
-                          text: 'Sí',
+                          text: 'SI',
                           isSelected: _controller.getAnswer(index) == 0,
                           selectedTextColor: Colors.green,
                           onPressed: () {
@@ -90,10 +106,10 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                       ),
                       SizedBox(
-                        width: 250,
+                        width: 200,
                         height: 150,
                         child: CustomButton(
-                          text: 'No',
+                          text: 'NO',
                           isSelected: _controller.getAnswer(index) == 1,
                           selectedTextColor: Colors.red,
                           onPressed: () {
@@ -133,10 +149,10 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         foregroundColor: isSelected ? selectedTextColor : Colors.black,
-        backgroundColor: Colors.grey[300], 
+        backgroundColor: Colors.grey[300],
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(40),
         ),
       ),
       child: FittedBox(

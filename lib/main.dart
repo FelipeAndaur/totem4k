@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Quiz App',
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -38,32 +39,66 @@ class HomeScreen extends StatelessWidget {
           ),
           // Botón de empezar
           Positioned(
-            bottom: 50,
+            bottom: 150,
             left: 0,
             right: 0,
             child: Center(
-              child: ElevatedButton(
+              child: CustomButton(
+                text: '¡EMPEZAR!',
+                backgroundColor: const Color(0xFF70CC74), // Color en formato hexadecimal
+
+                textColor: Colors.white,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const QuizScreen()),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(24),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(24.0),
-                  child: Text(
-                    '¡Empezar!',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final String text;
+  final Color backgroundColor;
+  final Color textColor;
+  final VoidCallback onPressed;
+
+  const CustomButton({
+    required this.text,
+    required this.backgroundColor,
+    required this.textColor,
+    required this.onPressed,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: textColor, backgroundColor: backgroundColor,
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontFamily: 'Goldplay',
+            fontSize: 40,
+            fontWeight: FontWeight.w900,
+            color: textColor,
+          ),
+        ),
       ),
     );
   }
