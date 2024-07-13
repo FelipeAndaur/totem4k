@@ -11,7 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Precargar la imagen de fondo de HomeScreen
     precacheImage(const AssetImage('assets/images/P1.webp'), context);
 
     return MaterialApp(
