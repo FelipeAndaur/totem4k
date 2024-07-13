@@ -61,19 +61,19 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/P1.png
-    - assets/images/Q1.png
-    - assets/images/Q2.png
-    - assets/images/Q3.png
-    - assets/images/Q4.png
-    - assets/images/Q5.png
-    - assets/images/Q6.png
-    - assets/images/Q7.png
-    - assets/images/Q8.png
-    - assets/images/Q9.png
-    - assets/images/R1.png
-    - assets/images/R2.png
-    - assets/images/R3.png
+    - assets/images/P1.webp
+    - assets/images/Q1.webp
+    - assets/images/Q2.webp
+    - assets/images/Q3.webp
+    - assets/images/Q4.webp
+    - assets/images/Q5.webp
+    - assets/images/Q6.webp
+    - assets/images/Q7.webp
+    - assets/images/Q8.webp
+    - assets/images/Q9.webp
+    - assets/images/R1.webp
+    - assets/images/R2.webp
+    - assets/images/R3.webp
 
   #   - images/a_dot_ham.jpeg
 

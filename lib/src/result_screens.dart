@@ -8,18 +8,20 @@ class ResultScreen extends StatelessWidget {
   const ResultScreen({required this.controller, super.key});
 
   String _getResultImage() {
-    double yesPercentage = (controller.yesCount / controller.numberOfQuestions) * 100;
+    double yesPercentage =
+        (controller.yesCount / controller.numberOfQuestions) * 100;
     if (yesPercentage == 100) {
-      return 'assets/images/R3.png';
+      return 'assets/images/R3.webp';
     } else if (yesPercentage >= 30) {
-      return 'assets/images/R2.png';
+      return 'assets/images/R2.webp';
     } else {
-      return 'assets/images/R1.png';
+      return 'assets/images/R1.webp';
     }
   }
 
   String _getResultText() {
-    double yesPercentage = (controller.yesCount / controller.numberOfQuestions) * 100;
+    double yesPercentage =
+        (controller.yesCount / controller.numberOfQuestions) * 100;
     return '${yesPercentage.toStringAsFixed(0)}% DE\nEQUILIBRIO!';
   }
 
@@ -53,14 +55,15 @@ class ResultScreen extends StatelessWidget {
                     fontSize: 122,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
-                    height: 1.0, // Ajusta esta propiedad para cambiar la separación entre líneas
+                    height:
+                        1.0, // Ajusta esta propiedad para cambiar la separación entre líneas
                   ),
                 ),
               ],
             ),
           ),
           // Botón de volver a empezar
-         Positioned(
+          Positioned(
             bottom: 30,
             left: 0,
             right: 0,
@@ -69,17 +72,39 @@ class ResultScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) =>  const HomeScreen()),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const HomeScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, -1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.ease;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(
+                          milliseconds: 800), // Duración de la transición
+                    ),
                     (route) => false,
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 20.0),
                 ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.refresh, color: Color.fromARGB(255, 126, 126, 126)),
+                    Icon(Icons.refresh,
+                        color: Color.fromARGB(255, 126, 126, 126)),
                     SizedBox(width: 10), // Espacio entre el icono y el texto
                     Text(
                       'VOLVER A EMPEZAR !',

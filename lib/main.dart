@@ -11,6 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Precargar la imagen de fondo de HomeScreen
+    precacheImage(const AssetImage('assets/images/P1.webp'), context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Quiz App',
@@ -28,12 +31,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF70CC74), // Color de fondo verde
+
       body: Stack(
         children: [
           // Imagen de fondo
           Positioned.fill(
             child: Image.asset(
-              'assets/images/P1.png', // Cambia esta ruta según tu imagen de fondo para la pantalla de inicio
+              'assets/images/P1.webp', // Cambia esta ruta según tu imagen de fondo para la pantalla de inicio
               fit: BoxFit.cover,
             ),
           ),
@@ -45,13 +50,34 @@ class HomeScreen extends StatelessWidget {
             child: Center(
               child: CustomButton(
                 text: '¡EMPEZAR!',
-                backgroundColor: const Color(0xFF70CC74), // Color en formato hexadecimal
+                backgroundColor:
+                    const Color(0xFF70CC74), // Color en formato hexadecimal
 
                 textColor: Colors.white,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const QuizScreen()),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const QuizScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.ease;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(
+                          milliseconds: 800), // Duración de la transición
+                    ),
                   );
                 },
               ),
@@ -82,7 +108,8 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        foregroundColor: textColor, backgroundColor: backgroundColor,
+        foregroundColor: textColor,
+        backgroundColor: backgroundColor,
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),

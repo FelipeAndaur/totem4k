@@ -14,10 +14,31 @@ class QuizScreenState extends State<QuizScreen> {
   late QuizController _controller;
   final PageController _pageController = PageController();
 
+  final List<String> images = [
+    'assets/images/Q1.webp',
+    'assets/images/Q2.webp',
+    'assets/images/Q3.webp',
+    'assets/images/Q4.webp',
+    'assets/images/Q5.webp',
+    'assets/images/Q6.webp',
+    'assets/images/Q7.webp',
+    'assets/images/Q8.webp',
+    'assets/images/Q9.webp',
+  ];
+
   @override
   void initState() {
     super.initState();
     _controller = QuizController(9); // Número de preguntas
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Precargar todas las imágenes
+    for (var imagePath in images) {
+      precacheImage(AssetImage(imagePath), context);
+    }
   }
 
   void _onAnswerSelected(int index, int answer) {
@@ -27,14 +48,31 @@ class QuizScreenState extends State<QuizScreen> {
 
     if (index < _controller.numberOfQuestions - 1) {
       _pageController.nextPage(
-        duration: const Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 800),
         curve: Curves.easeIn,
       );
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => ResultScreen(controller: _controller),
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              ResultScreen(controller: _controller),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+          transitionDuration:
+              const Duration(milliseconds: 800), // Duración de la transición
         ),
       );
     }
@@ -42,18 +80,6 @@ class QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> images = [
-      'assets/images/Q1.png',
-      'assets/images/Q2.png',
-      'assets/images/Q3.png',
-      'assets/images/Q4.png',
-      'assets/images/Q5.png',
-      'assets/images/Q6.png',
-      'assets/images/Q7.png',
-      'assets/images/Q8.png',
-      'assets/images/Q9.png',
-    ];
-
     return Scaffold(
       body: PageView.builder(
         controller: _pageController,
@@ -65,9 +91,10 @@ class QuizScreenState extends State<QuizScreen> {
               Positioned.fill(
                 child: Image.asset(
                   images[index],
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                 ),
               ),
+              // Icono de home
               // Icono de home
               Positioned(
                 top: 10,
@@ -77,7 +104,27 @@ class QuizScreenState extends State<QuizScreen> {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) =>  const HomeScreen()),
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const HomeScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, -1.0);
+                          const end = Offset.zero;
+                          const curve = Curves.ease;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: const Duration(
+                            milliseconds: 800), // Duración de la transición
+                      ),
                       (route) => false,
                     );
                   },
