@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'src/quiz_screen.dart';
 
 void main() {
@@ -11,8 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    precacheImage(const AssetImage('assets/images/P1.webp'), context);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Quiz App',
@@ -29,6 +26,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Precargar la primera imagen del quiz
+    precacheImage(const AssetImage('assets/images/Q1.webp'), context);
+
     return Scaffold(
       backgroundColor: const Color(0xFF70CC74), // Color de fondo verde
 
@@ -51,7 +51,6 @@ class HomeScreen extends StatelessWidget {
                 text: '¡EMPEZAR!',
                 backgroundColor:
                     const Color(0xFF70CC74), // Color en formato hexadecimal
-
                 textColor: Colors.white,
                 onPressed: () {
                   Navigator.push(
